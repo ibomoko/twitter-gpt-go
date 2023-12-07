@@ -1,8 +1,11 @@
 package main
 
-import "fmt"
+import (
+
+	"github.com/ibomoko/twitter-gpt-go/openai"
+)
 
 func  main() {
-	fmt.Println("Hello world!")
+	openai.CompleteChat("Calculate (x^2)d/dx")
 	
 }
