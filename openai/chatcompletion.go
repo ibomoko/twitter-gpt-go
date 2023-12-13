@@ -15,6 +15,7 @@ import (
 type ChatCompletion struct {
 	Model     string    `json:"model"`
 	Messages  []Message `json:"messages"`
+	Temperature float32 `json:"temperature"`
 }
 
 type Message struct {
@@ -30,24 +31,25 @@ type Choice struct {
 	Message   Message `json:"message"`
 }
 
-func CompleteChat(prompt string)  {
+func CompleteChat(prompt string) (r *ChatCompletionResponse) {
 	apiKey, url, model := fetchOpenAIConfig()
 
 	ChatCompletion := ChatCompletion{
 		Model: model,
 		Messages: []Message{{Role: "user", Content: prompt}},
+		Temperature: 0.9,
 	}
 	
 	requestBody, err := json.Marshal(ChatCompletion)
 	if err != nil {
 		fmt.Println("Error marshalling json: ", err)
-		return
+		return nil
 	}
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(requestBody))
 	if err != nil {
 		fmt.Println("Error creating request:", err)
-		return
+		return nil
 	}
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", "Bearer " + apiKey)
@@ -56,7 +58,7 @@ func CompleteChat(prompt string)  {
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		fmt.Println("Error sending request:", err)
-		return
+		return nil
 	}
 	
 	defer resp.Body.Close()
@@ -65,11 +67,10 @@ func CompleteChat(prompt string)  {
 	err = json.NewDecoder(resp.Body).Decode(&chatCompletionResponse)
 	if err != nil {
 		fmt.Println("Error decoding JSON response:", err)
-		return
+		return nil
 	}
 
-	fmt.Println(chatCompletionResponse.Choices[0].Message.Content)
-
+	return &chatCompletionResponse	
 }
 
 
