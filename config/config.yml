@@ -2,3 +2,7 @@ openai:
   api-key: ### Your OpenAI api key
   model: gpt-3.5-turbo
   url: https://api.openai.com/v1/chat/completions
+
+twitter:
+  access-token: ### Your access token
+  access-token-secret: ### Your access token secret
