@@ -15,7 +15,7 @@ type Credentials struct {
 	accessTokenSecret string
 }
 
-func Tweet() {
+func Tweet(text string) {
 	credentials := fetchTwitterConfig()
 	in := &gotwi.NewClientInput{
 		AuthenticationMethod: gotwi.AuthenMethodOAuth1UserContext,
@@ -30,7 +30,7 @@ func Tweet() {
 	}
 
 	p := &types.CreateInput{
-		Text: gotwi.String("Test"),
+		Text: gotwi.String(text),
 	}
 
 	_, err = managetweet.Create(context.Background(), c, p)
